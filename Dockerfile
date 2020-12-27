@@ -21,7 +21,7 @@ RUN                                                                             
 	mkdir -p /usr/src /src && cd /usr/src &&                                                 \
 	git clone --depth=1 --branch ${Z3_TAG} https://github.com/Z3Prover/z3.git &&             \
     mkdir -p z3/build && cd z3/build &&                                                      \
-    cmake -DCMAKE_BUILD_TYPE=Release -DTESTS=0 .. &&                                         \
+    cmake -DCMAKE_BUILD_TYPE=Release -DTESTS=0 -DCMAKE_INSTALL_PREFIX:PATH=/usr .. &&        \
     make install -j `getconf _NPROCESSORS_ONLN` &&                                           \
     cd ../.. &&                                                                              \
 	git clone --depth=1 https://github.com/danmar/cppcheck.git &&                            \
@@ -30,9 +30,7 @@ RUN                                                                             
         USE_Z3=yes                                                                           \
         FILESDIR=/cfg                                                                        \
         HAVE_RULES=yes                                                                       \
-        CXXFLAGS="-O2                                                                        \
-        -DNDEBUG --static"                                                                   \
-        LDFLAGS="-L/usr/local/lib64/"  &&                                                    \
+        CXXFLAGS="-O2 -DNDEBUG --static" &&                                                  \
 	strip /usr/bin/cppcheck &&                                                               \
 	apk del .required_apks &&                                                                \
 	rm -rf /usr/src &&                                                                       \
